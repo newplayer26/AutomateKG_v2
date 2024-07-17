@@ -1,0 +1,14 @@
+<% layout('layout') %>
+    <h1>Waiting</h1>
+    <script>
+        const eventSource = new EventSource('/control/sse');
+
+        eventSource.onmessage = updateLoadStatus;
+        eventSource.onerror = function () {
+            eventSource.close();
+        }
+
+        function updateLoadStatus(e) {
+            const data = JSON.parse(e.data);
+        }
+    </script>

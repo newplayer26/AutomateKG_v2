@@ -1,0 +1,9 @@
+openai
+tiktoken
+python-dotenv
+accelerate
+transformers
+torch
+retry
+uuid
+huggingface_hub

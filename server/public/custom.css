@@ -1,0 +1,18 @@
+.search-results {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.search-result {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.search-result:hover {
+    background-color: #f8f9fa;
+}

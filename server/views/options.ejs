@@ -1,0 +1,126 @@
+<% layout('layout') %>
+
+    <div class="container mt-5">
+        <nav class="nav nav-pills nav-fill">
+            <a class="nav-link active h3" data-bs-toggle="tab" data-bs-target="#openai">OpenAI API</a>
+            <a class="nav-link h3" data-bs-toggle="tab" data-bs-target="#huggingface">HuggingFace Transformers</a>
+        </nav>
+        <div class="tab-content border" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="openai" role="tabpanel">
+                <div class="m-5">
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="">Model</label>
+                            <select name="model_name_openai" class="form-select" id="model_name_openai">
+                                <option value="gpt-3.5-turbo">GPT 3.5 turbo</option>
+                                <option value="gpt-4">GPT 4</option>
+                            </select>
+                            <label for="">API key</label>
+                            <input type="text" class="form-control" id="api_key">
+                            <button class="btn btn-primary mt-2" id="openai_continue">Tiếp tục</button>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="tab-pane fade" id="huggingface" role="tabpanel">
+                <div class="m-5">
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="">Model</label>
+                            <input type="text" class="form-control" id="model_name_hf" name="model_name_hf"
+                                placeholder="Search HuggingFace models...">
+                            <div class="search-results" id="searchResults"></div>
+
+                            <label for="">HF token</label>
+                            <input type="text" class="form-control" id="hf_token">
+                            <button class="btn btn-primary mt-2" id="hf_continue">Tiếp tục</button>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        $(document).ready(function () {
+            const $searchInput = $('#model_name_hf');
+            const $searchResults = $('#searchResults');
+            const $hfContinue = $("#hf_continue")
+            const $openaiContinue = $("#openai_continue")
+
+            function confirmModel(button, choice, model_name, token) {
+                button.html(`<div class="spinner-border text-light" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>`)
+                axios.get(`/set_llm?choice=${choice}&model_name=${model_name}&token=${token}`).then((res) => {
+                    if (res.data.success) {
+                        if (confirm("LLM load thành công, tiếp tục?")) {
+                            $(location).attr('href', `/analyze?choice=${choice}&model_name=${model_name}&token=${token}`);
+                        }
+                    } else {
+                        alert("LLM load không thành công")
+                    }
+                }).catch((err) => {
+                    alert("LLM load không thành công")
+
+                }).finally(() => {
+                    button.html("Tiếp tục")
+                })
+            }
+            $openaiContinue.on("click", function () {
+                const apiKey = $("#api_key").val().trim()
+                if (!apiKey.length) {
+                    alert("Vui lòng nhập API key")
+                    return
+                }
+                const modelNameOpenAI = $("#model_name_openai").val()
+                confirmModel($openaiContinue, "OPENAI", modelNameOpenAI, apiKey)
+            })
+            $hfContinue.on("click", function () {
+                const token = $("#hf_token").val().trim()
+                const modelNameHF = $("#model_name_hf").val()
+                confirmModel($hfContinue, "HUGGINGFACE", modelNameHF, token)
+            })
+            $searchInput.on('input', async function () {
+                const query = $searchInput.val().trim();
+                if (query.length > 0) {
+                    const response = await fetch(`https://huggingface.co/api/models?search=${encodeURIComponent(query)}`);
+                    const results = await response.json();
+                    displayResults(results);
+                } else {
+                    clearResults();
+                }
+            });
+
+            $searchInput.on('blur', function () {
+                console.log("blurring")
+                setTimeout(function () {
+                    clearResults();
+                }, 200);
+            });
+
+            function displayResults(results) {
+                $searchResults.empty();
+                results.forEach(function (result) {
+                    const $resultItem = $('<div>').addClass('search-result').text(result.id);
+                    $resultItem.on('click', function () {
+                        $searchInput.val(result.id);
+                        clearResults();
+                    });
+                    $searchResults.append($resultItem);
+                });
+            }
+
+            function clearResults() {
+                $searchResults.empty();
+            }
+        });
+    </script>
