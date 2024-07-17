@@ -33,23 +33,30 @@ project-root/
 1. Clone the repository:
 
 2. Install Node.js dependencies:
+
+```plaintext
 cd server
 npm install
+```
 
-3. Install Python dependencies:
+4. Install Python dependencies:
+
+```plaintext
 pip install -r requirements.txt
-sql_more
-Copy
+```
+  
 
-4. Set up environment variables:
+5. Set up environment variables:
 - Copy the `.env.example` file to `.env`
 - Fill in the required environment variables in the `.env` file
 
 ## Usage
 
 1. Start the Node.js server:
+
+```plaintext
 cd server
 npm start
-Copy
+```
 
-2. The server should now be running on `http://localhost:3000` (or your specified port)
+3. The server should now be running on `http://localhost:3000` (or your specified port)
