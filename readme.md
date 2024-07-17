@@ -56,7 +56,7 @@ pip install -r requirements.txt
 
 ```plaintext
 cd server
-npm start
+node app.js
 ```
 
 3. The server should now be running on `http://localhost:3000` (or your specified port)
