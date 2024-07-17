@@ -3,19 +3,22 @@
 This Node.js web application leverages Large Language Models (LLM) to analyze unstructured data. It combines Python scripts for data processing with a Node.js server for web functionality.
 
 ## Folder Structure
+
+```plaintext
 project-root/
 │
 ├── scripts/
-│ └── (Python scripts for data processing)
+│   └── (Python scripts for data processing)
 │
 ├── server/
-│ ├── node_modules/
-│ ├── (JavaScript files for server logic)
-│ └── package.json
+│   ├── node_modules/
+│   ├── (JavaScript files for server logic)
+│   └── package.json
 │
 ├── .env
 ├── .gitignore
 └── requirements.txt
+```
 
 
 ## Prerequisites
