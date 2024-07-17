@@ -57,7 +57,7 @@ Start the Node.js server:
 
 ```plaintext
 cd server
-node app.js
+node index.js
 ```
 
 The server should now be running on `http://localhost:3000` (or your specified port)
